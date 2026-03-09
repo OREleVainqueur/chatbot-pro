@@ -20,4 +20,24 @@ async function sendWhatsApp(to, from, message) {
   }
 }
 
-module.exports = { sendWhatsApp };
+/**
+ * Envoie un broadcast à plusieurs numéros
+ */
+async function sendBroadcast(from, recipients, message) {
+  const results = [];
+  for (const to of recipients) {
+    try {
+      await twilioClient.messages.create({ from, to, body: message });
+      results.push({ to, success: true });
+      console.log(`📢 Broadcast envoyé à ${to}`);
+      // Petite pause pour éviter les limites de taux
+      await new Promise(resolve => setTimeout(resolve, 100));
+    } catch (err) {
+      results.push({ to, success: false, error: err.message });
+      console.error(`❌ Broadcast erreur à ${to}:`, err.message);
+    }
+  }
+  return results;
+}
+
+module.exports = { sendWhatsApp, sendBroadcast };

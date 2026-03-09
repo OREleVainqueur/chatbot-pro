@@ -99,9 +99,44 @@ app.post("/api/simulate", adminAuth, async (req, res) => {
   }
 });
 
+// Broadcast à tous les leads d'un business
+app.post("/api/broadcast", adminAuth, async (req, res) => {
+  try {
+    const { businessId, message } = req.body;
+    if (!businessId || !message) {
+      return res.status(400).json({ error: "businessId et message obligatoires" });
+    }
+
+    const business = getBusinessConfig(getAllBusinesses().find(b => b.id === businessId)?.whatsappNumber);
+    if (!business) {
+      return res.status(404).json({ error: "Business non trouvé" });
+    }
+
+    const leads = await getLeads(businessId);
+    const recipients = leads.map(l => l.phone).filter(phone => phone);
+
+    if (recipients.length === 0) {
+      return res.json({ success: true, message: "Aucun destinataire trouvé" });
+    }
+
+    const { sendBroadcast } = require("./twilioService");
+    const results = await sendBroadcast(business.whatsappNumber, recipients, message);
+
+    res.json({
+      success: true,
+      sent: results.filter(r => r.success).length,
+      failed: results.filter(r => !r.success).length,
+      total: results.length,
+      results
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Health check
 app.get("/health", (req, res) => {
-  res.json({ status: "online", version: "1.0.0", agency: process.env.AGENCY_NAME || "Prodience Lab" });
+  res.json({ status: "online", version: "2.0.0", agency: process.env.AGENCY_NAME || "Prodience Lab" });
 });
 
 // ── Démarrage ───────────────────────────────────────────────

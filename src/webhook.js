@@ -3,7 +3,7 @@
 // Orchestre tout : session → IA → lead → réponse
 // ============================================================
 const { getBusinessConfig, buildSystemPrompt } = require("./businessConfig");
-const { getSession, addMessage, updateLeadData } = require("./sessionManager");
+const { getSession, addMessage, updateLeadData, markEscalation } = require("./sessionManager");
 const { generateReply, detectLeadInfo } = require("./aiEngine");
 const { saveLead } = require("./leadCapture");
 const { sendWhatsApp } = require("./twilioService");
@@ -39,12 +39,18 @@ async function handleIncomingMessage(body) {
 
   // 5. Générer la réponse IA
   const systemPrompt = buildSystemPrompt(business);
-  const reply = await generateReply(systemPrompt, session.history);
+  let reply = await generateReply(systemPrompt, session.history);
 
-  // 6. Ajouter la réponse à l'historique
+  // 6. Vérifier si c'est une demande d'escalation
+  if (reply.includes("[ESCALATION_REQUESTED]")) {
+    markEscalation(session);
+    reply = reply.replace("[ESCALATION_REQUESTED]", "").trim();
+  }
+
+  // 7. Ajouter la réponse à l'historique
   addMessage(session, "assistant", reply);
 
-  // 7. Envoyer la réponse
+  // 8. Envoyer la réponse
   await sendWhatsApp(from, to, reply);
 
   // 8. Détecter et sauvegarder les infos de lead (en arrière-plan)

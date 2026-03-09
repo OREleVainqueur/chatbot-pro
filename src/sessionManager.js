@@ -73,6 +73,15 @@ function updateLeadData(session, data) {
 }
 
 /**
+ * Marque la session pour escalation
+ */
+function markEscalation(session) {
+  session.escalated = true;
+  session.escalatedAt = new Date().toISOString();
+  console.log(`🚨 Escalation demandée pour ${session.userPhone}`);
+}
+
+/**
  * Retourne les statistiques des sessions actives
  */
 function getStats() {
@@ -87,4 +96,4 @@ function getStats() {
   };
 }
 
-module.exports = { getSession, addMessage, updateLeadData, getStats };
+module.exports = { getSession, addMessage, updateLeadData, markEscalation, getStats };
