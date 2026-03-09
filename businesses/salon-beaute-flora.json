@@ -1,0 +1,75 @@
+{
+  "id": "salon-beaute-flora",
+  "name": "Salon Beauté Flora",
+  "type": "salon",
+  "whatsappNumber": "whatsapp:+2250700000002",
+  "active": true,
+
+  "identity": {
+    "botName": "Flora",
+    "greeting": "Bonjour belle 💅✨ Je suis Flora, votre assistante beauté !\n\nJe peux vous aider à prendre rendez-vous ou répondre à toutes vos questions.",
+    "language": "fr",
+    "tone": "élégant, féminin et bienveillant"
+  },
+
+  "businessInfo": {
+    "address": "Boulevard de la Paix, Treichville, Abidjan",
+    "phone": "+225 07 00 00 02",
+    "hours": "Lundi-Samedi : 8h00 - 19h00",
+    "instagram": "@salonbeauteflora"
+  },
+
+  "services": [
+    {
+      "category": "Coiffure",
+      "items": [
+        { "name": "Tresses simples", "price": 5000, "duration": "2h" },
+        { "name": "Tresses avec extensions", "price": 15000, "duration": "4h" },
+        { "name": "Tissage", "price": 20000, "duration": "3h" },
+        { "name": "Défrisage", "price": 8000, "duration": "1h30" },
+        { "name": "Coloration", "price": 12000, "duration": "2h" }
+      ]
+    },
+    {
+      "category": "Ongles",
+      "items": [
+        { "name": "Pose gel couleur unie", "price": 7000, "duration": "1h" },
+        { "name": "Pose gel avec décoration", "price": 10000, "duration": "1h30" },
+        { "name": "Manucure simple", "price": 3000, "duration": "45min" }
+      ]
+    },
+    {
+      "category": "Soin visage",
+      "items": [
+        { "name": "Nettoyage de peau", "price": 8000, "duration": "1h" },
+        { "name": "Soin hydratant", "price": 12000, "duration": "1h30" }
+      ]
+    }
+  ],
+
+  "appointments": {
+    "enabled": true,
+    "slots": ["8h00", "9h30", "11h00", "13h00", "14h30", "16h00", "17h30"],
+    "advanceBookingDays": 14,
+    "confirmationMessage": "✅ Votre rendez-vous est confirmé ! Nous vous attendons le {date} à {time}.\n\nEn cas d'empêchement, prévenez-nous 24h à l'avance.\n\nÀ très bientôt 💅"
+  },
+
+  "faqs": [
+    {
+      "question": "Faut-il prendre rendez-vous ?",
+      "answer": "Oui, nous travaillons sur rendez-vous pour vous garantir un service sans attente. Dites-moi le service souhaité et je vous propose les créneaux disponibles !"
+    },
+    {
+      "question": "Vendez-vous des produits capillaires ?",
+      "answer": "Oui ! Nous proposons des soins et produits pour cheveux naturels et défrisés. Venez nous rendre visite ou demandez-moi la liste 😊"
+    }
+  ],
+
+  "leadCapture": {
+    "enabled": true,
+    "fields": ["name", "phone", "service"],
+    "notifyEmail": "flora@salonflora.ci"
+  },
+
+  "quickReplies": ["💅 Nos services", "📅 Prendre RDV", "💰 Tarifs", "📍 Adresse", "📸 Instagram"]
+}

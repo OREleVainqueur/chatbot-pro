@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatBot Pro — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #00e5a0;
+    --accent2: #0066ff;
+    --warn: #ff6b35;
+    --text: #e8f0fe;
+    --muted: #6b7fa3;
+    --whatsapp: #25D366;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    background-image: radial-gradient(ellipse at 20% 20%, rgba(0,102,255,0.06) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 80%, rgba(0,229,160,0.04) 0%, transparent 60%);
+  }
+
+  /* ── LAYOUT ── */
+  .app { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-mark {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .nav { padding: 16px 12px; flex: 1; }
+
+  .nav-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 0 12px;
+    margin: 16px 0 8px;
+    font-weight: 500;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { background: rgba(0,229,160,0.1); color: var(--accent); }
+  .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .status-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── MAIN ── */
+  .main { margin-left: 260px; flex: 1; padding: 32px 36px; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+
+  .page-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .page-sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+  /* ── LOGIN ── */
+  .login-screen {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+    background-image: radial-gradient(ellipse at center, rgba(0,102,255,0.1) 0%, transparent 70%);
+  }
+
+  .login-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    width: 360px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .login-box h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .login-box p { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+
+  /* ── CARDS ── */
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--accent2); }
+
+  .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--text), var(--muted));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stat-value.accent { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .stat-change { font-size: 12px; color: var(--accent); margin-top: 6px; }
+
+  /* ── BUSINESS CARDS ── */
+  .business-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .business-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+
+  .business-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+
+  .business-avatar {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    background: var(--surface2);
+  }
+
+  .business-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+  .business-type { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .badge {
+    display: inline-flex; align-items: center;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .badge-active { background: rgba(0,229,160,0.1); color: var(--accent); border: 1px solid rgba(0,229,160,0.2); }
+  .badge-inactive { background: rgba(255,107,53,0.1); color: var(--warn); border: 1px solid rgba(255,107,53,0.2); }
+
+  .business-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .biz-stat { background: var(--surface2); border-radius: 8px; padding: 10px 12px; }
+  .biz-stat-val { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--accent); }
+  .biz-stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* ── TABLE ── */
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: var(--surface2); }
+  th { padding: 12px 16px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 500; }
+  td { padding: 14px 16px; font-size: 13px; border-top: 1px solid var(--border); }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .phone-badge {
+    font-family: monospace;
+    background: var(--surface2);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--accent2);
+  }
+
+  /* ── INPUTS & BUTTONS ── */
+  input, select, textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 11px 14px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus, select:focus, textarea:focus { border-color: var(--accent2); }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  .input-group { margin-bottom: 16px; }
+  .input-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; display: block; font-weight: 500; letter-spacing: 0.5px; }
+
+  .btn {
+    padding: 11px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+
+  .btn-primary { background: var(--accent); color: #0a0f1e; }
+  .btn-primary:hover { background: #00c988; transform: translateY(-1px); }
+
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--accent2); }
+
+  .btn-whatsapp { background: var(--whatsapp); color: white; }
+
+  .btn-sm { padding: 7px 14px; font-size: 12px; }
+
+  /* ── NOTIFICATIONS ── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    color: var(--text);
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 1000;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 50;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    width: 560px;
+    max-height: 80vh;
+    overflow-y: auto;
+    transform: translateY(20px);
+    transition: transform 0.2s;
+  }
+
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 24px; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+  .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+  .empty-state h3 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
+
+  /* ── SECTION ── */
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px; font-weight: 700;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  /* ── WHATSAPP PREVIEW ── */
+  .wa-preview {
+    background: #0d1117;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .wa-header {
+    background: #075e54;
+    padding: 12px 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .wa-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .wa-name { font-size: 14px; font-weight: 600; color: white; }
+  .wa-status { font-size: 11px; color: rgba(255,255,255,0.6); }
+
+  .wa-body { padding: 16px; min-height: 120px; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+
+  .wa-bubble {
+    background: #075e54;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    max-width: 80%;
+    display: inline-block;
+    white-space: pre-wrap;
+  }
+
+  .wa-time { font-size: 10px; color: rgba(255,255,255,0.5); text-align: right; margin-top: 4px; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ────────────────────────────────────────────── -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <h2>ChatBot Pro</h2>
+    <p>Dashboard de gestion — Prodience Lab</p>
+    <div class="input-group">
+      <label class="input-label">Mot de passe admin</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="login()">Accéder au dashboard</button>
+    <p style="font-size:12px;color:var(--muted);margin-top:16px;text-align:center">
+      Configurez <code>ADMIN_PASSWORD</code> dans votre <code>.env</code>
+    </p>
+  </div>
+</div>
+
+<!-- ── APP ──────────────────────────────────────────────── -->
+<div class="app" id="appShell" style="display:none">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-mark">⚡ ChatBot Pro</div>
+      <div class="logo-sub">by Prodience Lab</div>
+    </div>
+    <nav class="nav">
+      <div class="nav-label">Principal</div>
+      <button class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard">
+        <span class="icon">📊</span> Dashboard
+      </button>
+      <button class="nav-item" onclick="showPage('clients')" id="nav-clients">
+        <span class="icon">🏢</span> Mes clients
+      </button>
+      <button class="nav-item" onclick="showPage('leads')" id="nav-leads">
+        <span class="icon">🎯</span> Leads capturés
+      </button>
+      <div class="nav-label">Outils</div>
+      <button class="nav-item" onclick="showPage('new-client')" id="nav-new-client">
+        <span class="icon">➕</span> Nouveau client
+      </button>
+      <button class="nav-item" onclick="showPage('simulator')" id="nav-simulator">
+        <span class="icon">💬</span> Simulateur
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div><span class="status-dot"></span>Serveur en ligne</div>
+      <div style="margin-top:6px">v1.0 · Prodience Lab</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ── PAGE DASHBOARD ── -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Bonjour 👋</div>
+          <div class="page-sub">Vue d'ensemble de votre plateforme chatbot</div>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="loadStats()">↻ Actualiser</button>
+      </div>
+
+      <div class="grid-4" id="statsGrid">
+        <div class="card">
+          <div class="stat-label">Clients actifs</div>
+          <div class="stat-value accent" id="stat-clients">—</div>
+          <div class="stat-change">↑ chatbots déployés</div>
+        </div>
+        <div class="card">
+          <div class="stat-label">Sessions aujourd'hui</div>
+          <div class="stat-value" id="stat-sessions">—</div>
+          <div class="stat-change">Conversations actives</div>
+        </div>
+        <div class="card">
+          <div class="stat-label">Leads capturés</div>
+          <div class="stat-value accent" id="stat-leads">—</div>
+          <div class="stat-change">Total tous clients</div>
+        </div>
+        <div class="card">
+          <div class="stat-label">Leads aujourd'hui</div>
+          <div class="stat-value" id="stat-leads-today">—</div>
+          <div class="stat-change">Nouveaux contacts</div>
+        </div>
+      </div>
+
+      <div class="section-title">🏢 Clients récents</div>
+      <div id="dashboardBusinesses" class="grid-3">
+        <div style="color:var(--muted);font-size:14px;padding:20px">Chargement...</div>
+      </div>
+    </div>
+
+    <!-- ── PAGE CLIENTS ── -->
+    <div class="page" id="page-clients">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Mes clients</div>
+          <div class="page-sub">Gérez les chatbots de vos clients</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="showPage('new-client')">+ Nouveau client</button>
+      </div>
+      <div id="clientsGrid" class="grid-3"></div>
+    </div>
+
+    <!-- ── PAGE LEADS ── -->
+    <div class="page" id="page-leads">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Leads capturés</div>
+          <div class="page-sub">Contacts collectés par vos chatbots</div>
+        </div>
+        <select id="leadsFilter" style="width:220px" onchange="loadLeads()">
+          <option value="">Tous les clients</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Nom</th>
+              <th>Téléphone</th>
+              <th>Intérêt</th>
+              <th>Messages</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTable">
+            <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:40px">Chargement...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PAGE NOUVEAU CLIENT ── -->
+    <div class="page" id="page-new-client">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Nouveau client</div>
+          <div class="page-sub">Configurez un chatbot en quelques minutes</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div class="card">
+            <div class="section-title">🏢 Informations de base</div>
+
+            <div class="input-group">
+              <label class="input-label">Nom du business *</label>
+              <input type="text" id="nc-name" placeholder="Restaurant Chez Marie" oninput="updatePreview()">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Type d'activité *</label>
+              <select id="nc-type" onchange="updateTypeEmoji()">
+                <option value="restaurant">🍽️ Restaurant / Alimentation</option>
+                <option value="salon">💅 Salon / Beauté</option>
+                <option value="boutique">👗 Boutique / Commerce</option>
+                <option value="hotel">🏨 Hôtel / Hébergement</option>
+                <option value="pharmacie">💊 Pharmacie / Santé</option>
+                <option value="immobilier">🏠 Immobilier / Location</option>
+                <option value="auto">🚗 Garage / Auto</option>
+                <option value="education">📚 École / Formation</option>
+                <option value="autre">⚡ Autre service</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label class="input-label">Numéro WhatsApp Business *</label>
+              <input type="text" id="nc-whatsapp" placeholder="whatsapp:+2250700000001">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Prénom de l'assistante IA</label>
+              <input type="text" id="nc-botname" placeholder="Marie, Awa, Flora..." oninput="updatePreview()">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Ton et personnalité</label>
+              <input type="text" id="nc-tone" placeholder="chaleureux, professionnel, dynamique...">
+            </div>
+
+            <hr class="divider">
+            <div class="section-title">📍 Coordonnées</div>
+
+            <div class="input-group">
+              <label class="input-label">Adresse</label>
+              <input type="text" id="nc-address" placeholder="Quartier, Ville">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Téléphone</label>
+              <input type="text" id="nc-phone" placeholder="+225 07 00 00 00">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Horaires d'ouverture</label>
+              <input type="text" id="nc-hours" placeholder="Lun-Sam : 8h-20h">
+            </div>
+
+            <hr class="divider">
+            <div class="section-title">💬 Message d'accueil</div>
+
+            <div class="input-group">
+              <textarea id="nc-greeting" rows="4" placeholder="Bonjour ! Je suis Marie..." oninput="updatePreview()"></textarea>
+            </div>
+
+            <hr class="divider">
+            <div class="section-title">📋 Informations métier</div>
+            <div class="input-group">
+              <label class="input-label">Services, menu ou produits (un par ligne)</label>
+              <textarea id="nc-services" rows="6" placeholder="Poulet braisé — 4500 FCFA&#10;Attiéké poisson — 3500 FCFA&#10;Livraison disponible"></textarea>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">Questions fréquentes (une par ligne)</label>
+              <textarea id="nc-faqs" rows="4" placeholder="Livrez-vous à domicile ? Oui, dans tout Cocody.&#10;Acceptez-vous Wave ? Oui."></textarea>
+            </div>
+
+            <button class="btn btn-primary" style="width:100%" onclick="saveNewClient()">
+              ✅ Créer le chatbot
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-title">👁️ Prévisualisation WhatsApp</div>
+          <div class="wa-preview">
+            <div class="wa-header">
+              <div class="wa-avatar" id="prev-emoji">🍽️</div>
+              <div>
+                <div class="wa-name" id="prev-name">Nom du business</div>
+                <div class="wa-status">en ligne</div>
+              </div>
+            </div>
+            <div class="wa-body" style="padding:16px">
+              <div class="wa-bubble" id="prev-greeting">
+                Bonjour ! Je suis votre assistante. Comment puis-je vous aider ?
+              </div>
+              <div class="wa-time">maintenant</div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px" class="card">
+            <div class="section-title">📌 Checklist déploiement</div>
+            <div style="font-size:13px;line-height:2;color:var(--muted)">
+              <div>✅ Numéro WhatsApp Business activé</div>
+              <div>✅ Webhook Twilio configuré</div>
+              <div>✅ Clé Claude API valide</div>
+              <div>✅ Config business créée</div>
+              <div style="color:var(--accent)">→ Serveur redémarré</div>
+            </div>
+          </div>
+
+          <div style="margin-top:16px" class="card">
+            <div class="section-title">💰 Facturation suggérée</div>
+            <div style="font-size:13px;line-height:1.8">
+              <div style="color:var(--muted)">Setup unique</div>
+              <div style="font-family:'Syne',sans-serif;font-size:22px;color:var(--accent)">50 000 FCFA</div>
+              <hr class="divider" style="margin:12px 0">
+              <div style="color:var(--muted)">Abonnement mensuel</div>
+              <div style="font-family:'Syne',sans-serif;font-size:22px;color:var(--accent2)">25 000 FCFA/mois</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAGE SIMULATEUR ── -->
+    <div class="page" id="page-simulator">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Simulateur WhatsApp</div>
+          <div class="page-sub">Testez le chatbot d'un client avant livraison</div>
+        </div>
+        <select id="simBusiness" style="width:220px" onchange="startSimulation()"></select>
+      </div>
+
+      <div class="grid-2">
+        <div class="wa-preview" style="height:500px;display:flex;flex-direction:column">
+          <div class="wa-header">
+            <div class="wa-avatar" id="sim-emoji">🤖</div>
+            <div>
+              <div class="wa-name" id="sim-name">Sélectionnez un client</div>
+              <div class="wa-status" id="sim-status">—</div>
+            </div>
+          </div>
+          <div class="wa-body" id="simMessages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px">
+            <div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;margin-top:auto">
+              Sélectionnez un client pour commencer
+            </div>
+          </div>
+          <div style="padding:12px;background:#1a1a2e;display:flex;gap:8px">
+            <input type="text" id="simInput" placeholder="Tapez un message..." style="flex:1;background:rgba(255,255,255,0.08);border-color:transparent" onkeydown="if(event.key==='Enter')sendSimMessage()">
+            <button class="btn btn-whatsapp btn-sm" onclick="sendSimMessage()">Envoyer</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="section-title">⚡ Messages test rapides</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px" id="quickTestButtons">
+              <div style="color:var(--muted);font-size:13px">Sélectionnez un client d'abord</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="section-title">ℹ️ Configuration active</div>
+            <pre id="simConfig" style="font-size:11px;color:var(--muted);overflow:auto;max-height:200px">—</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ <span id="toastMsg"></span></div>
+
+<script>
+// ── STATE ──
+let adminPassword = '';
+let businesses = [];
+let allLeads = [];
+let simHistory = [];
+let currentSimBusiness = null;
+
+const EMOJIS = {
+  restaurant: '🍽️', salon: '💅', boutique: '👗',
+  hotel: '🏨', pharmacie: '💊', immobilier: '🏠',
+  auto: '🚗', education: '📚', autre: '⚡'
+};
+
+// ── AUTH ──
+function login() {
+  const pw = document.getElementById('loginPassword').value;
+  if (!pw) return;
+  adminPassword = pw;
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appShell').style.display = 'flex';
+  loadStats();
+}
+
+// ── NAVIGATION ──
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name)?.classList.add('active');
+  document.getElementById('nav-' + name)?.classList.add('active');
+
+  if (name === 'clients') loadClients();
+  if (name === 'leads') loadLeads();
+  if (name === 'simulator') loadSimulator();
+  if (name === 'dashboard') loadStats();
+}
+
+// ── API HELPERS ──
+async function api(path, method = 'GET', body = null) {
+  const opts = {
+    method,
+    headers: { 'Content-Type': 'application/json', 'x-admin-password': adminPassword },
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch('/api' + path, opts);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+// ── DASHBOARD ──
+async function loadStats() {
+  try {
+    const data = await api('/stats');
+    businesses = data.businesses || [];
+
+    document.getElementById('stat-clients').textContent = businesses.filter(b => b.active).length;
+    document.getElementById('stat-sessions').textContent = data.sessions?.activeSessions || 0;
+
+    let totalLeads = 0, todayLeads = 0;
+    Object.values(data.leads || {}).forEach(l => {
+      totalLeads += l.total || 0;
+      todayLeads += l.today || 0;
+    });
+
+    document.getElementById('stat-leads').textContent = totalLeads;
+    document.getElementById('stat-leads-today').textContent = todayLeads;
+
+    renderDashboardBusinesses(businesses, data.leads || {});
+  } catch (e) {
+    console.error(e);
+    if (e.message.includes('401')) {
+      toast('❌ Mot de passe incorrect');
+      document.getElementById('appShell').style.display = 'none';
+      document.getElementById('loginScreen').style.display = 'flex';
+    }
+  }
+}
+
+function renderDashboardBusinesses(biz, leads) {
+  const el = document.getElementById('dashboardBusinesses');
+  if (!biz.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">🏢</div><h3>Aucun client</h3><p>Ajoutez votre premier client</p></div>`;
+    return;
+  }
+  el.innerHTML = biz.slice(0, 6).map(b => {
+    const stats = leads[b.id] || { total: 0, today: 0 };
+    return `
+    <div class="business-card" onclick="showPage('leads');document.getElementById('leadsFilter').value='${b.id}';loadLeads()">
+      <div class="business-header">
+        <div class="business-avatar">${EMOJIS[b.type] || '⚡'}</div>
+        <div>
+          <div class="business-name">${b.name}</div>
+          <div class="business-type">${b.type}</div>
+        </div>
+        <div style="margin-left:auto">
+          <span class="badge ${b.active ? 'badge-active' : 'badge-inactive'}">${b.active ? 'Actif' : 'Inactif'}</span>
+        </div>
+      </div>
+      <div class="business-stats">
+        <div class="biz-stat">
+          <div class="biz-stat-val">${stats.total}</div>
+          <div class="biz-stat-label">leads total</div>
+        </div>
+        <div class="biz-stat">
+          <div class="biz-stat-val">${stats.today}</div>
+          <div class="biz-stat-label">aujourd'hui</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── CLIENTS ──
+async function loadClients() {
+  try {
+    const biz = await api('/businesses');
+    const el = document.getElementById('clientsGrid');
+    if (!biz.length) {
+      el.innerHTML = `<div class="empty-state"><div class="icon">🏢</div><h3>Aucun client configuré</h3><p>Ajoutez votre premier client chatbot</p></div>`;
+      return;
+    }
+    el.innerHTML = biz.map(b => `
+      <div class="business-card">
+        <div class="business-header">
+          <div class="business-avatar">${EMOJIS[b.type] || '⚡'}</div>
+          <div>
+            <div class="business-name">${b.name}</div>
+            <div class="business-type">${b.type}</div>
+          </div>
+          <span class="badge ${b.active ? 'badge-active' : 'badge-inactive'}" style="margin-left:auto">${b.active ? 'Actif' : 'Inactif'}</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:12px">
+          <span class="phone-badge">${b.whatsappNumber}</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-secondary btn-sm" onclick="viewLeadsForBusiness('${b.id}')">🎯 Leads</button>
+          <button class="btn btn-whatsapp btn-sm" onclick="testInSimulator('${b.id}')">💬 Tester</button>
+        </div>
+      </div>`).join('');
+  } catch (e) { console.error(e); }
+}
+
+// ── LEADS ──
+async function loadLeads() {
+  try {
+    const businesses = await api('/businesses');
+    const filter = document.getElementById('leadsFilter');
+    const currentVal = filter.value;
+
+    // Peupler le filtre
+    filter.innerHTML = '<option value="">Tous les clients</option>' +
+      businesses.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+    filter.value = currentVal;
+
+    const tbody = document.getElementById('leadsTable');
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">Chargement...</td></tr>';
+
+    let leads = [];
+    if (filter.value) {
+      leads = await api('/leads/' + filter.value);
+      leads = leads.map(l => ({ ...l, businessName: businesses.find(b => b.id === l.businessId)?.name || l.businessId }));
+    } else {
+      for (const b of businesses) {
+        const bLeads = await api('/leads/' + b.id);
+        leads.push(...bLeads.map(l => ({ ...l, businessName: b.name })));
+      }
+    }
+
+    leads.sort((a, b) => new Date(b.capturedAt) - new Date(a.capturedAt));
+
+    if (!leads.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:40px">Aucun lead capturé pour le moment</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = leads.map(l => `
+      <tr>
+        <td><span style="font-size:12px;color:var(--accent)">${l.businessName || l.businessId}</span></td>
+        <td>${l.name || '<span style="color:var(--muted)">—</span>'}</td>
+        <td>${l.contactPhone || l.phone ? `<span class="phone-badge">${l.contactPhone || l.phone}</span>` : '<span style="color:var(--muted)">—</span>'}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:var(--muted)">${l.interest || l.service || l.firstMessage || '—'}</td>
+        <td><span style="color:var(--accent2)">${l.messageCount || 0}</span></td>
+        <td style="font-size:12px;color:var(--muted)">${formatDate(l.capturedAt)}</td>
+      </tr>`).join('');
+  } catch (e) { console.error(e); }
+}
+
+function viewLeadsForBusiness(id) {
+  showPage('leads');
+  setTimeout(() => { document.getElementById('leadsFilter').value = id; loadLeads(); }, 100);
+}
+
+// ── NOUVEAU CLIENT ──
+function updatePreview() {
+  const name = document.getElementById('nc-name').value || 'Nom du business';
+  const botname = document.getElementById('nc-botname').value || 'votre assistante';
+  const greeting = document.getElementById('nc-greeting').value ||
+    `Bonjour ! Je suis ${botname}, votre assistante chez ${name}. Comment puis-je vous aider ?`;
+
+  document.getElementById('prev-name').textContent = name;
+  document.getElementById('prev-greeting').textContent = greeting;
+}
+
+function updateTypeEmoji() {
+  const type = document.getElementById('nc-type').value;
+  document.getElementById('prev-emoji').textContent = EMOJIS[type] || '⚡';
+}
+
+async function saveNewClient() {
+  const name = document.getElementById('nc-name').value.trim();
+  const whatsapp = document.getElementById('nc-whatsapp').value.trim();
+
+  if (!name || !whatsapp) {
+    toast('❌ Nom et numéro WhatsApp obligatoires');
+    return;
+  }
+
+  const id = name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+  const type = document.getElementById('nc-type').value;
+  const botname = document.getElementById('nc-botname').value || 'Assistante';
+
+  // Parser services
+  const servicesRaw = document.getElementById('nc-services').value.trim();
+  const services = servicesRaw ? servicesRaw.split('\n').filter(Boolean).map(line => {
+    const parts = line.split('—');
+    return { name: parts[0]?.trim(), price: parseInt(parts[1]) || 0 };
+  }) : [];
+
+  // Parser FAQs
+  const faqsRaw = document.getElementById('nc-faqs').value.trim();
+  const faqs = faqsRaw ? faqsRaw.split('\n').filter(Boolean).map(line => {
+    const idx = line.indexOf('?');
+    if (idx < 0) return null;
+    return { question: line.slice(0, idx + 1).trim(), answer: line.slice(idx + 1).trim() };
+  }).filter(Boolean) : [];
+
+  const config = {
+    id,
+    name,
+    type,
+    whatsappNumber: whatsapp.startsWith('whatsapp:') ? whatsapp : 'whatsapp:' + whatsapp,
+    active: true,
+    identity: {
+      botName: botname,
+      greeting: document.getElementById('nc-greeting').value ||
+        `Bonjour ! Je suis ${botname}, votre assistante chez ${name}. Comment puis-je vous aider ?`,
+      language: 'fr',
+      tone: document.getElementById('nc-tone').value || 'chaleureux et professionnel',
+    },
+    businessInfo: {
+      address: document.getElementById('nc-address').value,
+      phone: document.getElementById('nc-phone').value,
+      hours: document.getElementById('nc-hours').value,
+    },
+    services: services.length ? [{ category: 'Nos services', items: services }] : [],
+    faqs,
+    leadCapture: { enabled: true, fields: ['name', 'phone', 'interest'] },
+    quickReplies: ['📋 Nos services', '📍 Adresse', '⏰ Horaires', '📞 Appeler'],
+  };
+
+  try {
+    await api('/businesses', 'POST', config);
+    toast('✅ Client créé avec succès !');
+    setTimeout(() => showPage('clients'), 1500);
+  } catch (e) {
+    toast('❌ Erreur : ' + e.message);
+  }
+}
+
+// ── SIMULATEUR ──
+async function loadSimulator() {
+  try {
+    const biz = await api('/businesses');
+    const sel = document.getElementById('simBusiness');
+    sel.innerHTML = '<option value="">— Choisir un client —</option>' +
+      biz.map(b => `<option value='${JSON.stringify(b).replace(/'/g, "&#39;")}'>${b.name}</option>`).join('');
+  } catch (e) { console.error(e); }
+}
+
+function startSimulation() {
+  const val = document.getElementById('simBusiness').value;
+  if (!val) return;
+  const b = JSON.parse(val.replace(/&#39;/g, "'"));
+  currentSimBusiness = b;
+  simHistory = [];
+
+  document.getElementById('sim-emoji').textContent = EMOJIS[b.type] || '⚡';
+  document.getElementById('sim-name').textContent = b.name;
+  document.getElementById('sim-status').textContent = 'en ligne';
+  document.getElementById('simConfig').textContent = JSON.stringify({ id: b.id, type: b.type, whatsapp: b.whatsappNumber }, null, 2);
+
+  const msgs = document.getElementById('simMessages');
+  msgs.innerHTML = `<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:11px">Simulation démarrée — ${b.name}</div>`;
+
+  // Quick test buttons
+  const btns = ['Bonjour', 'Quels sont vos services ?', 'Quels sont vos horaires ?', 'Comment vous trouver ?', 'Je veux commander'];
+  document.getElementById('quickTestButtons').innerHTML = btns.map(t =>
+    `<button class="btn btn-secondary btn-sm" onclick="sendSim('${t}')">${t}</button>`
+  ).join('');
+}
+
+async function sendSimMessage() {
+  const input = document.getElementById('simInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  await sendSim(msg);
+}
+
+async function sendSim(msg) {
+  if (!currentSimBusiness) { toast('Sélectionnez un client d\'abord'); return; }
+
+  addSimMessage('user', msg);
+  simHistory.push({ role: 'user', content: msg });
+
+  // Appel API Claude via notre backend (simulation)
+  try {
+    const res = await fetch('/api/simulate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': adminPassword },
+      body: JSON.stringify({ businessId: currentSimBusiness.id, history: simHistory }),
+    });
+    const data = await res.json();
+    const reply = data.reply || 'Erreur de simulation';
+    simHistory.push({ role: 'assistant', content: reply });
+    addSimMessage('bot', reply);
+  } catch (e) {
+    addSimMessage('bot', '⚠️ Erreur : assurez-vous que le serveur est démarré et l\'API Claude configurée.');
+  }
+}
+
+function addSimMessage(role, text) {
+  const msgs = document.getElementById('simMessages');
+  const isBot = role === 'bot';
+  const div = document.createElement('div');
+  div.style.cssText = `display:flex;justify-content:${isBot ? 'flex-start' : 'flex-end'}`;
+  div.innerHTML = `
+    <div style="max-width:75%">
+      <div style="background:${isBot ? '#075e54' : '#1d8348'};color:white;padding:10px 14px;border-radius:${isBot ? '0 8px 8px 8px' : '8px 0 8px 8px'};font-size:13px;line-height:1.5;white-space:pre-wrap">${text}</div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:3px;text-align:${isBot ? 'left' : 'right'}">${new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'})}</div>
+    </div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function testInSimulator(id) {
+  showPage('simulator');
+  setTimeout(async () => {
+    const biz = await api('/businesses');
+    const b = biz.find(x => x.id === id);
+    if (!b) return;
+    const sel = document.getElementById('simBusiness');
+    loadSimulator().then(() => {
+      const opt = Array.from(sel.options).find(o => {
+        try { return JSON.parse(o.value.replace(/&#39;/g, "'")).id === id; } catch { return false; }
+      });
+      if (opt) { sel.value = opt.value; startSimulation(); }
+    });
+  }, 100);
+}
+
+// ── UTILS ──
+function formatDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' }) +
+    ' ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// Init
+document.getElementById('loginPassword').focus();
+</script>
+</body>
+</html>

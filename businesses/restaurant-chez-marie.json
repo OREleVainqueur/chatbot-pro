@@ -1,0 +1,75 @@
+{
+  "id": "restaurant-chez-marie",
+  "name": "Restaurant Chez Marie",
+  "type": "restaurant",
+  "whatsappNumber": "whatsapp:+2250700000001",
+  "active": true,
+
+  "identity": {
+    "botName": "Marie",
+    "greeting": "Bonjour ! Je suis Marie, votre assistante au Restaurant Chez Marie 🍽️\n\nComment puis-je vous aider ?",
+    "language": "fr",
+    "tone": "chaleureux et professionnel"
+  },
+
+  "businessInfo": {
+    "address": "Rue des Jardins, Cocody, Abidjan",
+    "phone": "+225 07 00 00 01",
+    "hours": "Lundi-Samedi : 11h00 - 22h00 | Dimanche : 12h00 - 21h00",
+    "website": "www.chezmarie.ci",
+    "delivery": true,
+    "deliveryZones": ["Cocody", "Plateau", "Marcory"],
+    "minOrderDelivery": 5000
+  },
+
+  "menu": [
+    {
+      "category": "Plats du jour",
+      "items": [
+        { "name": "Attiéké poisson braisé", "price": 3500, "description": "Attiéké frais avec poisson braisé et sauce tomate" },
+        { "name": "Riz sauce graine", "price": 4000, "description": "Riz blanc avec sauce de graine de palme et poulet" },
+        { "name": "Placali foutou", "price": 3000, "description": "Placali ou foutou avec soupe de légumes" }
+      ]
+    },
+    {
+      "category": "Grillades",
+      "items": [
+        { "name": "Poulet braisé entier", "price": 8500, "description": "Poulet mariné et braisé aux épices locales" },
+        { "name": "Poulet braisé demi", "price": 4500 },
+        { "name": "Poisson braisé capitaine", "price": 6000 }
+      ]
+    },
+    {
+      "category": "Boissons",
+      "items": [
+        { "name": "Jus de gingembre", "price": 1000 },
+        { "name": "Jus de bissap", "price": 1000 },
+        { "name": "Eau minérale", "price": 500 },
+        { "name": "Coca-Cola", "price": 800 }
+      ]
+    }
+  ],
+
+  "faqs": [
+    {
+      "question": "Livrez-vous à domicile ?",
+      "answer": "Oui ! Nous livrons dans les zones Cocody, Plateau et Marcory. Commande minimum 5 000 FCFA. Délai : 30-45 minutes."
+    },
+    {
+      "question": "Comment passer une commande ?",
+      "answer": "Dites-moi simplement ce que vous voulez et votre adresse. Je m'occupe du reste !"
+    },
+    {
+      "question": "Acceptez-vous les paiements Mobile Money ?",
+      "answer": "Oui, nous acceptons Orange Money, Wave et MTN Mobile Money, en plus du paiement en espèces."
+    }
+  ],
+
+  "leadCapture": {
+    "enabled": true,
+    "fields": ["name", "phone", "interest"],
+    "notifyEmail": "marie@chezmarie.ci"
+  },
+
+  "quickReplies": ["📋 Voir le menu", "🛵 Commander", "📍 Localisation", "⏰ Horaires", "📞 Appeler"]
+}

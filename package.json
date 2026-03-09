@@ -1,0 +1,22 @@
+{
+  "name": "chatbot-whatsapp-pro",
+  "version": "1.0.0",
+  "description": "Plateforme de chatbot WhatsApp IA multi-clients — par Prodience Lab",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "fs-extra": "^11.2.0",
+    "twilio": "^5.0.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}

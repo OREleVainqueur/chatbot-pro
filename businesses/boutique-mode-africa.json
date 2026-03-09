@@ -1,0 +1,71 @@
+{
+  "id": "boutique-mode-africa",
+  "name": "Africa Mode Boutique",
+  "type": "boutique",
+  "whatsappNumber": "whatsapp:+2250700000003",
+  "active": true,
+
+  "identity": {
+    "botName": "Awa",
+    "greeting": "Salut ! 👗✨ Je suis Awa, votre styliste personnelle chez Africa Mode !\n\nNos collections allient mode africaine et tendances contemporaines.\n\nComment puis-je vous aider ?",
+    "language": "fr",
+    "tone": "dynamique, tendance et accueillant"
+  },
+
+  "businessInfo": {
+    "address": "Centre Commercial Playce, Marcory, Abidjan",
+    "phone": "+225 07 00 00 03",
+    "hours": "Tous les jours : 9h00 - 20h00",
+    "instagram": "@africamodeboutique",
+    "delivery": true
+  },
+
+  "catalog": [
+    {
+      "category": "Robes",
+      "items": [
+        { "name": "Robe wax longue", "price": 18000, "sizes": ["S", "M", "L", "XL"], "colors": ["Bleu", "Rouge", "Vert"] },
+        { "name": "Robe cocktail africaine", "price": 25000, "sizes": ["S", "M", "L"] },
+        { "name": "Robe casual tissu local", "price": 12000, "sizes": ["S", "M", "L", "XL", "XXL"] }
+      ]
+    },
+    {
+      "category": "Ensembles",
+      "items": [
+        { "name": "Ensemble 2 pièces wax", "price": 30000, "sizes": ["S", "M", "L", "XL"] },
+        { "name": "Boubou femme brodé", "price": 35000, "sizes": ["Unique ajustable"] }
+      ]
+    },
+    {
+      "category": "Accessoires",
+      "items": [
+        { "name": "Sac en tissu wax", "price": 8000 },
+        { "name": "Foulard tête", "price": 3500 },
+        { "name": "Boucles d'oreilles artisanales", "price": 2500 }
+      ]
+    }
+  ],
+
+  "faqs": [
+    {
+      "question": "Faites-vous des retouches ?",
+      "answer": "Oui ! Nos couturières sur place font toutes les retouches. Délai : 24 à 48h selon le travail."
+    },
+    {
+      "question": "Livrez-vous à l'extérieur d'Abidjan ?",
+      "answer": "Oui, nous envoyons partout en Côte d'Ivoire et dans la sous-région via transporteurs. Délai 2-5 jours ouvrables."
+    },
+    {
+      "question": "Faites-vous des commandes sur mesure ?",
+      "answer": "Absolument ! Envoyez-nous vos mesures et le modèle souhaité. Délai de confection : 1 à 2 semaines."
+    }
+  ],
+
+  "leadCapture": {
+    "enabled": true,
+    "fields": ["name", "phone", "interest"],
+    "notifyEmail": "contact@africamode.ci"
+  },
+
+  "quickReplies": ["👗 Voir collections", "📦 Commander", "📏 Prendre mesures", "🚚 Livraison", "📍 Nous trouver"]
+}
