@@ -144,7 +144,7 @@ app.use((req, res, next) => {
   if (req.headers.origin === 'https://prodiencelab.com') {
     res.header('Access-Control-Allow-Origin', 'https://prodiencelab.com');
     res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, x-site-token');
   }
   if (req.method === 'OPTIONS') return res.sendStatus(200);
   next();
