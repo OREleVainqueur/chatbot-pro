@@ -152,6 +152,11 @@ app.use((req, res, next) => {
 
 app.post('/chat', async (req, res) => {
   try {
+    // Vérification token de sécurité
+    const token = req.headers['x-site-token'];
+    if (token !== 'PL-2026-SITE-SECRET') {
+      return res.status(403).json({ error: 'Accès non autorisé' });
+    }
     const { messages, system } = req.body;
     const { generateReply } = require('./aiEngine');
     const reply = await generateReply(system, messages);
