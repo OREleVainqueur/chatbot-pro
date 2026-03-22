@@ -139,6 +139,32 @@ app.get("/health", (req, res) => {
   res.json({ status: "online", version: "2.0.0", agency: process.env.AGENCY_NAME || "Prodience Lab" });
 });
 
+// ── Proxy Claude — Chatbot prodiencelab.com ─────────────────
+app.use((req, res, next) => {
+  if (req.headers.origin === 'https://prodiencelab.com') {
+    res.header('Access-Control-Allow-Origin', 'https://prodiencelab.com');
+    res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+  }
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
+
+app.post('/chat', async (req, res) => {
+  try {
+    const { messages, system } = req.body;
+    const { generateReply } = require('./aiEngine');
+    const reply = await generateReply(system, messages);
+    res.json({ content: [{ text: reply }] });
+  } catch (error) {
+    console.error('Erreur proxy Claude:', error);
+    res.status(500).json({
+      fallback: "Petit souci technique 😅 Écrivez-nous sur WhatsApp : +225 07 15 41 53 96"
+    });
+  }
+});
+// ── Fin Proxy Claude ─────────────────────────────────────────
+
 // ── Démarrage ───────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 
